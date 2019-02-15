@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.prospec.edupro.Utils.UserParcelable;
 
 public class MainActivity extends AppCompatActivity
+//    ประกาศตัวแปร
         implements NavigationView.OnNavigationItemSelectedListener {
     private int ident;
     private UserParcelable user;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -45,7 +48,8 @@ public class MainActivity extends AppCompatActivity
                     String url_image = "http://192.168.1.5/movil_database/" + user.getImage();
                     url_image = url_image.replace(" ", "%20");
                     try {
-                        Log.i("RESPUESTA IMAGE: ", "" + url_image);
+//                        เช็ครูปภาพ
+                        Log.i("IMAGE: ", "" + url_image);
                         Glide.with(this).load(url_image).into(photo);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+//        fab ของ emailยังไม่ใช้งาน
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+//        รูปที่จะนำไปแสดงในแถบเครื่องมือ เบอร์เกอร์ drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
+//    ส่วนของmenu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

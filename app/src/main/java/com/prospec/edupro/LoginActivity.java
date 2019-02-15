@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+//    ประกาศตัวแปร
     private Button acceder;
     private TextView registrar;
     private TextInputEditText email;
@@ -38,36 +39,43 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        email = (TextInputEditText)findViewById(R.id.etusuario);
-        password = (TextInputEditText)findViewById(R.id.etpass);
-        acceder = (Button)findViewById(R.id.btn_acceder);
-        registrar = (TextView)findViewById(R.id.signup);
-        requestQueue = Volley.newRequestQueue(this);
-
-        registrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(getApplicationContext(),SignupActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                finish();
-            }
-        });
-
-        acceder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iniciar();
-            }
-        });
+        getevent();
     }
+
+    private void getevent() {
+//        Get Event
+            email = (TextInputEditText)findViewById(R.id.etusuario);
+            password = (TextInputEditText)findViewById(R.id.etpass);
+            acceder = (Button)findViewById(R.id.btn_acceder);
+            registrar = (TextView)findViewById(R.id.signup);
+            requestQueue = Volley.newRequestQueue(this);
+
+//            กดปุ่ม register เพื่อทำการลงทะเบียน
+            registrar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(getApplicationContext(),SignupActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    finish();
+                }
+            });
+
+//            กรณีที่ลงทะเบียนแล้วกรอก email password จากนั้นกดLogin
+            acceder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iniciar();
+                }
+            });
+        }
 
     private void iniciar() {
 
         if (!validar()) return;
 
         progreso = new ProgressDialog(this);
-        progreso.setMessage("Iniciando...");
+        progreso.setMessage("รอสักครู่...");
         progreso.show();
         String url = "http://192.168.1.5/movil_database/login_movil.php?";
 
@@ -75,19 +83,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 UserParcelable userParcelable = new UserParcelable();;
-                Log.i("RESPUESTA JSON: ",""+response);
+//                lod ดู Register JSON ว่าใช้งานได้มั้ย
+                Log.i("Register JSON: ",""+response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.names().get(0).equals("success")){
                         email.setText("");
                         password.setText("");
-
+//                        เรียกข้อมูลJSON มาเช็ค
                         userParcelable.setId(jsonObject.getJSONArray("usuario").getJSONObject(0).getInt("iduser_"));
                         userParcelable.setEmail(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("email"));
                         userParcelable.setNombre(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("nombres"));
                         userParcelable.setImage(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("photo"));
 
-                        Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),jsonObject.getString("เข้าสู่ระบบสำเร็จ"),Toast.LENGTH_SHORT).show();
                         progreso.dismiss();
 
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
@@ -96,7 +105,8 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     }else{
                         Toast.makeText(getApplicationContext(),jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
-                        Log.i("RESPUESTA JSON: ",""+jsonObject.getString("error"));
+//                        log แสดงในกรณีที่เกิดความผิดพลาด
+                        Log.i("Register JSON: ",""+jsonObject.getString("error"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -107,19 +117,19 @@ public class LoginActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"No se ha podido conectar",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"ไม่สามารถเชื่อมต่อ",Toast.LENGTH_SHORT).show();
                 progreso.dismiss();
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {//para enviar los datos mediante POST
+            protected Map<String, String> getParams() throws AuthFailureError {//เพื่อส่งข้อมูลโดย POST
                 String sEmail = email.getText().toString();
                 String sPassword =  password.getText().toString();
 
                 Map<String,String> parametros = new HashMap<>();
                 parametros.put("email",sEmail);
                 parametros.put("password",sPassword);
-                //estos parametros son enviados a nuestro web service
+                //พารามิเตอร์เหล่านี้จะถูกส่งไปยังบริการเว็บของบริษัท
 
                 return parametros;
             }
@@ -135,14 +145,14 @@ public class LoginActivity extends AppCompatActivity {
         String sPassword = password.getText().toString();
 
         if (sEmail.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
-            email.setError("Introduzca una dirección de correo electrónico válida");
+            email.setError("ป้อนที่อยู่อีเมลที่ถูกต้อง");
             valid = false;
         } else {
             email.setError(null);
         }
 
-        if (sPassword.isEmpty() || password.length() < 4 || password.length() > 10) {
-            password.setError("Entre 4 y 10 caracteres alfanuméricos");
+        if (sPassword.isEmpty() || password.length() < 4 || password.length() > 8) {
+            password.setError("ระหว่าง 4 ถึง 8 ตัวอักษรและตัวเลข");
             valid = false;
         } else {
             password.setError(null);

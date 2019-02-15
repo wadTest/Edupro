@@ -97,7 +97,7 @@
         <TextView android:id="@+id/link_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="เป็นสมาชิกอยู่แล้ว? เข้าสู่ระบบ"
+            android:text="เป็นสมาชิกอยู่แล้ว เข้าสู่ระบบ"
             android:gravity="center"
             android:textColor="@color/colorAccent_r"
             android:textSize="16dip"/>

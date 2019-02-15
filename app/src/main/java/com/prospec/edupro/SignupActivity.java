@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
+//    ประกาศตัวแปร
     private TextView loginLink;
     private ImageView imagePhoto;
     private TextInputEditText password;
@@ -41,14 +42,18 @@ public class SignupActivity extends AppCompatActivity {
     private int request_code = 1;
     private Bitmap bitmap;
     private ProgressDialog progreso;
-    RequestQueue requestQueue; //permitara la conexion directamente del web service
+    RequestQueue requestQueue; //อนุญาตการเชื่อมต่อโดยตรงจากบริการบนเว็บ
     StringRequest stringRequest;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        getevent();
+    }
+
+    private void getevent() {
         imagePhoto = (ImageView) findViewById(R.id.usuario_imagen_registro);
         loginLink = (TextView)findViewById(R.id.link_login);
         email = (TextInputEditText)findViewById(R.id.correo_registro);
@@ -69,13 +74,13 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = null;
-                //verificacion de la version de plataforma
+                //การตรวจสอบเวอร์ชันของแพลตฟอร์ม
                 if(Build.VERSION.SDK_INT < 19){
-                    //android 4.3  y anteriores
+                    //Android 4.3 และรุ่นก่อนหน้า
                     i = new Intent();
                     i.setAction(Intent.ACTION_GET_CONTENT);
                 }else {
-                    //android 4.4 y superior
+                    //Android 4.4 และสูงกว่า
                     i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     i.addCategory(Intent.CATEGORY_OPENABLE);
                 }
@@ -84,6 +89,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+//        มีบัฐชีแล้ว
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +106,7 @@ public class SignupActivity extends AppCompatActivity {
         if (!validar()) return;
 
         progreso = new ProgressDialog(this);
-        progreso.setMessage("Iniciando...");
+        progreso.setMessage("รอสักครู่...");
         progreso.show();
         String url = "http://192.168.1.5/movil_database/register_movil.php?";
 
@@ -108,7 +114,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 UserParcelable userParcelable = new UserParcelable();;
-                Log.i("RESPUESTA JSON: ",""+response);
+                Log.i("Register JSON: ",""+response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if(jsonObject.names().get(0).equals("success")){
@@ -157,7 +163,7 @@ public class SignupActivity extends AppCompatActivity {
                 parametros.put("password",sPassword);
                 parametros.put("photo",sImagePhoto);
                 parametros.put("nombres",sNombre);
-                //estos parametros son enviados a nuestro web service
+                //พารามิเตอร์เหล่านี้จะถูกส่งไปยังบริการเว็บของบริษัท
 
                 return parametros;
             }
@@ -175,7 +181,7 @@ public class SignupActivity extends AppCompatActivity {
             byte[] imagenByte=array.toByteArray();
             imagenString= Base64.encodeToString(imagenByte,Base64.DEFAULT);
         }else{
-            imagenString = "no imagen"; //se enviara este string en caso de no haber imagen
+            imagenString = "no image"; //สายนี้จะถูกส่งในกรณีที่ไม่มีภาพ
         }
 
         return imagenString;
@@ -189,21 +195,21 @@ public class SignupActivity extends AppCompatActivity {
         String sEmail = email.getText().toString();
 
         if (sNombre.isEmpty() || sNombre.length() < 3) {
-            nombre.setError("Ingrese al menos 3 caracteres");
+            nombre.setError("ป้อนอย่างน้อย 3 ตัวอักษร");
             valid = false;
         } else {
             nombre.setError(null);
         }
 
         if (sEmail.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
-            email.setError("Dirección de correo electrónico no válida");
+            email.setError("ที่อยู่อีเมลไม่ถูกต้อง");
             valid = false;
         } else {
             email.setError(null);
         }
 
-        if (sPassword.isEmpty() || password.length() < 4 || password.length() > 10) {
-            password.setError("Ingrese entre 4 a 10 caracteres alfanuméricos");
+        if (sPassword.isEmpty() || password.length() < 4 || password.length() > 8) {
+            password.setError("ป้อนตัวอักษรและตัวเลขระหว่าง 4 ถึง 8 ตัว");
             valid = false;
         } else {
             password.setError(null);
