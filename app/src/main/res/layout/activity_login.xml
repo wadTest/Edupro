@@ -45,6 +45,7 @@
             android:layout_marginTop="8dp"
             android:hint="E-mail"
             android:textColorHint="@color/colorPrimary">
+
             <android.support.design.widget.TextInputEditText
                 android:textColor="@android:color/black"
                 android:backgroundTint="@color/colorPrimaryDark"
@@ -63,6 +64,7 @@
             android:layout_marginTop="8dp"
             android:hint="Password"
             android:textColorHint="@color/colorPrimary">
+
             <android.support.design.widget.TextInputEditText
                 android:textColor="@android:color/black"
                 android:backgroundTint="@color/colorPrimaryDark"
@@ -90,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="สมัครสมาชิก"
+            android:text="ยังไม่ได้ลงทะเบียน! สมัครสมาชิก?"
             android:gravity="center"
             android:textColor="@color/colorAccent_r"
             android:textSize="16dip"/>

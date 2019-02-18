@@ -23,7 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
-
+//class login
 public class LoginActivity extends AppCompatActivity {
 //    ประกาศตัวแปร
     private Button acceder;
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         progreso = new ProgressDialog(this);
         progreso.setMessage("รอสักครู่...");
         progreso.show();
-        String url = "http://192.168.1.5/movil_database/login_movil.php?";
+        String url = "http://119.59.103.121/app_mobile/edupro/login_movil.php";
 
         stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -91,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
                         email.setText("");
                         password.setText("");
 //                        เรียกข้อมูลJSON มาเช็ค
-                        userParcelable.setId(jsonObject.getJSONArray("usuario").getJSONObject(0).getInt("iduser_"));
+                        userParcelable.setId(jsonObject.getJSONArray("usuario").getJSONObject(0).getInt("id"));
                         userParcelable.setEmail(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("email"));
-                        userParcelable.setNombre(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("nombres"));
+                        userParcelable.setNombre(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("name"));
                         userParcelable.setImage(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("photo"));
 
                         Toast.makeText(getApplicationContext(),jsonObject.getString("เข้าสู่ระบบสำเร็จ"),Toast.LENGTH_SHORT).show();
@@ -141,8 +141,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean validar() {
         boolean valid = true;
 
-        String sEmail = email.getText().toString();
-        String sPassword = password.getText().toString();
+        String sEmail = email.getText().toString().trim();
+        String sPassword = password.getText().toString().trim();
 
         if (sEmail.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(sEmail).matches()) {
             email.setError("ป้อนที่อยู่อีเมลที่ถูกต้อง");

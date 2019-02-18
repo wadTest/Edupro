@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+//class sign up
 public class SignupActivity extends AppCompatActivity {
 //    ประกาศตัวแปร
     private TextView loginLink;
@@ -108,7 +109,7 @@ public class SignupActivity extends AppCompatActivity {
         progreso = new ProgressDialog(this);
         progreso.setMessage("รอสักครู่...");
         progreso.show();
-        String url = "http://192.168.1.5/movil_database/register_movil.php?";
+        String url = "http://119.59.103.121/app_mobile/edupro/register_movil.php";
 
         stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -121,9 +122,9 @@ public class SignupActivity extends AppCompatActivity {
                         email.setText("");
                         nombre.setText("");
                         password.setText("");
-                        userParcelable.setId(jsonObject.getJSONArray("usuario").getJSONObject(0).getInt("iduser_"));
+                        userParcelable.setId(jsonObject.getJSONArray("usuario").getJSONObject(0).getInt("id"));
                         userParcelable.setEmail(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("email"));
-                        userParcelable.setNombre(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("nombres"));
+                        userParcelable.setNombre(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("name"));
                         userParcelable.setImage(jsonObject.getJSONArray("usuario").getJSONObject(0).getString("photo"));
 
                         Toast.makeText(getApplicationContext(),jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
@@ -146,23 +147,24 @@ public class SignupActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"No se ha podido conectar",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"ไม่สามารถเชื่อมต่อ",Toast.LENGTH_SHORT).show();
+//                log แสดงข้อผิดพลาด
                 Log.i("ERROR: ",""+error.toString());
                 progreso.dismiss();
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {//para enviar los datos mediante POST
-                String sEmail = email.getText().toString();
-                String sPassword =  password.getText().toString();
-                String sNombre = nombre.getText().toString();
+                String sEmail = email.getText().toString().trim();
+                String sPassword =  password.getText().toString().trim();
+                String sNombre = nombre.getText().toString().trim();
                 String  sImagePhoto = convertirImgString(bitmap);
 
                 Map<String,String> parametros = new HashMap<>();
                 parametros.put("email",sEmail);
                 parametros.put("password",sPassword);
                 parametros.put("photo",sImagePhoto);
-                parametros.put("nombres",sNombre);
+                parametros.put("name",sNombre);
                 //พารามิเตอร์เหล่านี้จะถูกส่งไปยังบริการเว็บของบริษัท
 
                 return parametros;
@@ -190,12 +192,12 @@ public class SignupActivity extends AppCompatActivity {
     private boolean validar() {
         boolean valid = true;
 
-        String sNombre = nombre.getText().toString();
-        String sPassword = password.getText().toString();
-        String sEmail = email.getText().toString();
+        String sNombre = nombre.getText().toString().trim();
+        String sPassword = password.getText().toString().trim();
+        String sEmail = email.getText().toString().trim();
 
         if (sNombre.isEmpty() || sNombre.length() < 3) {
-            nombre.setError("ป้อนอย่างน้อย 3 ตัวอักษร");
+            nombre.setError("กรุณากรอกชื่อผู้ใช้งาน");
             valid = false;
         } else {
             nombre.setError(null);

@@ -19,8 +19,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.prospec.edupro.Utils.UserParcelable;
 
+//class Main
 public class MainActivity extends AppCompatActivity
-//    ประกาศตัวแปร
+//    ประกาศตัวแปร โดยมีเครื่องมือ Navigation (เบอร์เกอร์)
         implements NavigationView.OnNavigationItemSelectedListener {
     private int ident;
     private UserParcelable user;
@@ -31,9 +32,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
+//       Add Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//        Add Navigation ( class นี่เชื่อมโยงกับ nav_header_main.xml)
         View header = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         ImageView photo = (ImageView) header.findViewById(R.id.image_menu);
 
@@ -42,10 +45,12 @@ public class MainActivity extends AppCompatActivity
             user = bundle.getParcelable("DATA_USER");
             if (bundle != null) {
                 ident = user.getId();
+                // ชื่อผู้ใช้งาน
                 ((TextView) header.findViewById(R.id.tv_nombre_user_nav_header)).setText(user.getNombre());
+                // อีเมล์ผู้ัใช้งาน
                 ((TextView) header.findViewById(R.id.tv_email_user_nav_header)).setText(user.getEmail());
-                if (!user.getImage().equals("sin imagen")) {
-                    String url_image = "http://192.168.1.5/movil_database/" + user.getImage();
+                if (!user.getImage().equals("no image")) {
+                    String url_image = "http://119.59.103.121/app_mobile/edupro/" + user.getImage();
                     url_image = url_image.replace(" ", "%20");
                     try {
 //                        เช็ครูปภาพ
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+//    menu item
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -90,22 +96,23 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-//    ส่วนของmenu
+
+    //    ส่วนของmenu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // ขยายเมนู สิ่งนี้จะเพิ่มรายการในแถบการกระทำหากมีอยู่
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // จัดการการคลิกรายการแถบการกระทำที่นี่ แถบแอ็คชั่นจะ
+        // จัดการการคลิกที่ปุ่ม Home / Up โดยอัตโนมัตินาน ๆ
+        //ตามที่คุณระบุผู้ปกครอง activity ใน AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //menu settings
         if (id == R.id.action_settings) {
             return true;
         }
@@ -116,11 +123,11 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        // จัดการรายการคลิกมุมมองการนำทางที่นี่
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            // จัดการกับการเคลื่อนไหวของกล้อง
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -137,4 +144,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
+}//Main Class
